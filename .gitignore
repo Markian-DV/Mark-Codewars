@@ -1,0 +1,7 @@
+*.csproj
+*.sln
+Program.cs
+bin/
+obj/
+codewars/
+.vs/
