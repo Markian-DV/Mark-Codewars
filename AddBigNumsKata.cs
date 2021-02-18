@@ -10,47 +10,50 @@ namespace codewars
 
         public static string Add(string a, string b)
         {
-
-            List<char> A = a.Length >= b.Length ? a.ToCharArray().ToList() : b.ToCharArray().ToList(); //len a>= len b
-            List<char> B = b.Length <= a.Length ? b.ToCharArray().ToList() : a.ToCharArray().ToList();
+            //len A>= len B
+            List<string> A = a.Length >= b.Length ? a.Select(c => c.ToString()).ToList() : b.Select(c => c.ToString()).ToList();
+            List<string> B = b.Length <= a.Length ? b.Select(c => c.ToString()).ToList() : a.Select(c => c.ToString()).ToList();
             List<string> Res = new List<string>();
-            int NumB; bool next;
+            int NumB, NumA;
             for (int i = A.Count - 1, j = B.Count - 1; i >= 0; i--, j--)
             {
-                if (j >= 0) NumB = B[j] - '0';
-                else NumB = 0;
+                NumA = int.Parse(A[i]);
+                NumB = j >= 0 ? int.Parse(B[j]) : 0;
 
-                int TmpRes = (A[i] - '0') + NumB;
-
-                if (TmpRes.ToString().Length > 1) next = true;
-                else next = false;
-                if (!next) Res.Insert(0, TmpRes.ToString());
+                if (NumA + NumB < 10) Res.Insert(0, (NumA + NumB).ToString());
                 else
                 {
-                    Res.Insert(0, (TmpRes % 10).ToString());
-                    AddNext(i, A);
+                    Res.Insert(0, ((NumA + NumB)%10).ToString());
+                    AddOne(i, A, ref i);
                 }
-
-
             }
+
             //Print(A);
             return string.Join("", Res);
         }
-        static void AddNext(int index, List<char> A)
+        static void AddOne(int index, List<string> A,ref int i)
         {
-            //TODO: implement transfer to the next figure
-        }
-
-        //
-        static void Print(List<char> A)
-        {
-            foreach (var item in A)
+            if(index==0)
             {
-                Console.Write(item);
+                A[0] = "0";
+                A.Insert(0, "1");
+                i++;
+                return;
             }
-            Console.WriteLine();
-
+            if(int.Parse(A[index-1])<9)
+            {
+                //0
+                A[index] = "0";
+                A[index - 1] = (int.Parse(A[index - 1]) + 1).ToString();
+            }
+            else
+            {
+                A[index]="0";
+                AddOne(--index, A,ref i);
+            }
         }
+
+
     }
 
 }
